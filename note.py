@@ -46,8 +46,6 @@ class Note:
     return self.store 
 
   _set_title = set_title
-  _set_start = set_start
-  _set_end = set_end
   _set_category = set_category
   _set_source = set_source 
 
@@ -77,7 +75,7 @@ class Note:
 
   def read_data(self):
     path = os.path.join(self.root,self.store)
-    date = open(path,'r')
+    data = open(path,'r')
     content = data.read()
     return content
 
