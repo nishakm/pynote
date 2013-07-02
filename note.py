@@ -1,34 +1,31 @@
 '''
 Class: Note
-Description: This will reference where in the file the note is stored
+Description: This contains all the information about the note
 The note has the following attributes:
-- start: where it starts in storage
-- end: where it ends in storage
 - title: the note's title
 - category: what category the note is under
 - source: where the note came from
 - tags: search keywords
+- root: root directory set by the main module
+- store: file where the note contents are stored
 '''
 
 import os
+import hashlib as h
+from datetime import datetime as d
 
 class Note:
-  def __init__(self):
-    self._set_title("")
-    self._set_start(0)
-    self._set_end(0)
+  def __init__(self,title,root):
+    self._set_title("title")
+    self.root = root
     self._set_category("")
     self._set_source("")
     self.tags = set()
+    self.store = h.sha1(title+
+                        d.now().strftime('%Y%m%d%H%M%S')).hexdigest()
     
   def set_title(self,title):
     self.title = title
-
-  def set_start(self,start):
-    self.start = start
-
-  def set_end(self,end):
-    self.end = end
 
   def set_category(self,category):
     self.category = category
@@ -39,17 +36,14 @@ class Note:
   def get_title(self):
     return self.title
 
-  def get_start(self):
-    return self.start
-
-  def get_end(self):
-    return self.end
-
   def get_category(self):
     return self.category
 
   def get_source(self):
-    return self.source 
+    return self.source
+
+  def get_store(self):
+    return self.store 
 
   _set_title = set_title
   _set_start = set_start
@@ -75,10 +69,15 @@ class Note:
       success = true
     return success
 
-  def write_data(self,filename,note):
-    data = open(filename,'a')
-    self._set_start(data.tell())
+  def write_data(self,note):
+    path = os.path.join(self.root,self.store)
+    data = open(path,'w')
     data.write(note)
-    self._set_end(data.tell())
     data.close
+
+  def read_data(self):
+    path = os.path.join(self.root,self.store)
+    date = open(path,'r')
+    content = data.read()
+    return content
 
